@@ -25,5 +25,10 @@ WORKDIR /var/www/html
 # Копируем все файлы проекта внутрь контейнера
 COPY . .
 
-# Устанавливаем зависимости после копирования проекта
-RUN composer install --no-interaction --prefer-dist --no-dev
+# Установка зависимостей без выполнения скриптов artisan
+RUN composer install --no-scripts --no-interaction --prefer-dist --no-dev
+
+# Затем ручной запуск скриптов Laravel
+RUN php artisan package:discover --ansi && \
+    php artisan vendor:publish --tag=filament-config --force && \
+    php artisan vendor:publish --tag=filament-assets --force
