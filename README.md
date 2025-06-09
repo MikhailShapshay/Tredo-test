@@ -9,7 +9,7 @@
 ```
 2. Запустите очередь (для обработки пушей)
 ```bash
-      docker exec app php artisan queue:work
+    docker exec app php artisan queue:work
 ```
 ## Описание ссылок:
 
