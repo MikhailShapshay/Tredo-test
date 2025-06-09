@@ -30,9 +30,9 @@ RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
 # Установка зависимостей без запуска скриптов (чтобы избежать ошибки с artisan)
-RUN composer install --no-scripts --no-interaction --prefer-dist --no-dev
+# RUN composer install --no-scripts --no-interaction --prefer-dist --no-dev
 
 # Запуск artisan-скриптов после установки зависимостей
-RUN php artisan package:discover --ansi && \
-    php artisan vendor:publish --tag=filament-config --force && \
-    php artisan vendor:publish --tag=filament-assets --force
+# RUN php artisan package:discover --ansi && \
+#     php artisan vendor:publish --tag=filament-config --force && \
+#     php artisan vendor:publish --tag=filament-assets --force
