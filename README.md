@@ -7,7 +7,12 @@
 ```bash
    docker-compose up -d --build
 ```
-2. Запустите очередь (для обработки пушей)
+2. Установите зависимости:
+```bash
+   docker-compose exec php composer install --no-interaction --prefer-dist
+```
+3. Скопировать в корень проекта файл .env (скинул отдельно)
+4. Запустите очередь (для обработки пушей)
 ```bash
     docker exec app php artisan queue:work
 ```
