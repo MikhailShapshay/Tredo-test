@@ -36,3 +36,5 @@ RUN composer install --no-scripts --no-interaction --prefer-dist --no-dev
 RUN php artisan package:discover --ansi && \
     php artisan vendor:publish --tag=filament-config --force && \
     php artisan vendor:publish --tag=filament-assets --force
+
+RUN composer install --no-interaction --prefer-dist --no-dev
