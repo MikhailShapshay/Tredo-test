@@ -1,0 +1,57 @@
+version: '3.9'
+
+networks:
+  laravel:
+    name: laravel
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx.dockerfile
+    depends_on:
+      - php
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: php
+    expose:
+      - "9000"
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - laravel
+
+  postgres:
+    image: postgres:13.3
+    container_name: postgres
+    environment:
+      POSTGRES_DB: "postgres2"
+      POSTGRES_USER: "postgres2"
+      POSTGRES_PASSWORD: "postgres2"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/db:/docker-entrypoint-initdb.d
+    networks:
+      - laravel
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - laravel

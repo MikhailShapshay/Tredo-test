@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Firebase FCM Token</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+</head>
+<body>
+<h1>FCM Token</h1>
+<pre id="token">Запрашиваем разрешение и получаем токен...</pre>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyA9h_diPE-IT2ebh_JVRKt7egulEnbBFZQ",
+        authDomain: "tredo-16837.firebaseapp.com",
+        projectId: "tredo-16837",
+        storageBucket: "tredo-16837.appspot.com",
+        messagingSenderId: "993434627757",
+        appId: "1:993434627757:web:763d1bd21726aeec98e024",
+        measurementId: "G-HRPLHF859L"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const messaging = firebase.messaging();
+
+    // Сначала регистрируем service worker
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then((registration) => {
+            console.log("SW registered");
+
+            return Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    return messaging.getToken({
+                        vapidKey: "BCNv3IQsEmZVsokyStvD4OAD7dYbJPyuHwzHt8YnJ6aD1hRuW78CY-ENC2pH3kW6DYwMX3IpfODFDCE4f6xLKVg",
+                        serviceWorkerRegistration: registration
+                    });
+                } else {
+                    throw new Error("Нет разрешения на уведомления");
+                }
+            });
+        })
+        .then(token => {
+            document.getElementById('token').textContent = token;
+            console.log("FCM Token:", token);
+        })
+        .catch(error => {
+            document.getElementById('token').textContent = "Ошибка: " + error.message;
+            console.error(error);
+        });
+</script>
+
+</body>
+</html>
