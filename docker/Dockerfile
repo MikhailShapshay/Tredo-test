@@ -25,10 +25,14 @@ WORKDIR /var/www/html
 # Копируем все файлы проекта внутрь контейнера
 COPY . .
 
-# Установка зависимостей без выполнения скриптов artisan
+# Устанавливаем права на storage и bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
+
+# Установка зависимостей без запуска скриптов (чтобы избежать ошибки с artisan)
 RUN composer install --no-scripts --no-interaction --prefer-dist --no-dev
 
-# Затем ручной запуск скриптов Laravel
+# Запуск artisan-скриптов после установки зависимостей
 RUN php artisan package:discover --ansi && \
     php artisan vendor:publish --tag=filament-config --force && \
     php artisan vendor:publish --tag=filament-assets --force
